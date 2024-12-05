@@ -29,7 +29,6 @@
 		"axios": "^1.7.7",
 		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.7",
-		"flag-icons": "^7.2.3",
 		"qrcode": "^1.5.4",
 		"tw-elements": "^2.0.0",
 		"userbase-js": "^2.8.0"

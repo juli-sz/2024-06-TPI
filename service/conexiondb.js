@@ -52,7 +52,7 @@ export async function ArtistasConsulta() {
         }
         const resultados = results[0];
         const listArtistas = resultados.map((row) => {
-          return new Artistas(row.DNI, row.NyA, row.res_biografia, row.contacto, row.URL_foto, row.promedio,row.nacionalidad);
+          return new Artistas(row.DNI, row.NyA, row.res_biografia, row.contacto, row.URL_foto, row.promedio);
         });
 
         // Cerrar la conexión
@@ -469,7 +469,7 @@ cloudinary.config({
   api_key: process.env.api_key,
   api_secret: process.env.api_secret
 });
-console.log(process.env.cloud_name)
+
 // Función para insertar un artista
 export async function insertarArtista(artista, imagenPerfil) {
   console.log("Insertando artista...");

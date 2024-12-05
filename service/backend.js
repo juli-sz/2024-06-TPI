@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../.env') });
 import { ArtistasConsulta, EsculturasConsulta, EventosConsulta, login, ObrasdeUnEvento, ObrasdeUnArtista, EventosYEsculturasDeObra, insertarEvento, insertarArtista, register, registrar_voto } from './conexiondb.js';
-import { ordenarEsculturas, buscarEsculturas, ordenarEventos, buscarEventos, ordenarArtistas, buscarArtistas, eventoProximo } from './filtrosObjetos.js';
+import { ordenarEsculturas, buscarEsculturas, ordenarEventos, buscarEventos, ordenarArtistas, buscarArtistas } from './filtrosObjetos.js';
 
 
 // Clave secreta para firmar el token (debería ser almacenada de forma segura, como en variables de entorno)
@@ -56,7 +56,7 @@ const obtenerArtistas = async (busqueda, criterio, orden) => {
       const biografia = artista.getRes_biografia();
       const contacto = artista.getContacto();
       const promedio = artista.getPromedio();
-      const nacionalidad=artista.getNacionalidad();
+
       cards.push({
         id: index + 1,
         escultorPantalla: nombre.replace(/ /g, ''), 
@@ -64,8 +64,7 @@ const obtenerArtistas = async (busqueda, criterio, orden) => {
         escultorName: nombre,
         escultorFoto: imagen,
         contactoEmail: contacto,
-        promedio: promedio,
-        nacionalidad:nacionalidad
+        promedio: promedio
       });
     }
     return cards;
@@ -351,72 +350,6 @@ const obtenerArtistasyEventosdeObra = async (obra) => {
   }
 };
 
-const obtenerEventoProximo = async () => {
-  try {
-    let eventosCache = cache.get('eventos');
-    if (!eventosCache) {
-      eventosCache = await EventosConsulta();
-      cache.set('eventos', eventosCache, ttl);
-    }
-    const eventProximo = eventoProximo(eventosCache);
-
-    const card = [];
-
-    const titulo = eventProximo.getNombre();
-    const fechaInicio = new Date(eventProximo.getFechaInicio());
-    const fechaFin = new Date(eventProximo.getFechaFin());
-    const tematica = eventProximo.getTematica();
-    const lugar = eventProximo.getLugar();
-    const horaInicio = eventProximo.getHoraInicio();
-    const horaFin = eventProximo.getHoraFin();
-    const promedio = eventProximo.getPromedio();
-    const options = { month: 'long', day: 'numeric' };
-    const formattedFechaInicio = fechaInicio.toLocaleDateString('es-ES', options);
-    const formattedFechaFin = fechaFin.toLocaleDateString('es-ES', options);
-
-    const formattedHoraInicio = horaInicio.split(':').slice(0, 2).join(':');  // De "09:30:00" a "09:30"
-    const formattedHoraFin = horaFin.split(':').slice(0, 2).join(':');        // De "15:00:00" a "15:00"
-
-    card.push({
-      title: 'evento',
-      eventName: titulo,
-      eventoPantalla: titulo.replace(/ /g, ''),
-      eventStartDate: formattedFechaInicio,
-      eventFinishDate: formattedFechaFin,
-      startTime: formattedHoraInicio,
-      finishTime: formattedHoraFin,
-      location: lugar,
-      content: tematica,
-      promedio: promedio
-    });
-
-    return card;
-
-  } catch (error) {
-    console.error('Error al obtener eventos:', error);
-    return [];  // Retornar un array vacío en caso de error
-  }
-};
-
-// Middleware para verificar token y rol
-const verificarTokenYRol = (rolesPermitidos) => (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.status(403).json({ success: false, message: 'Token no proporcionado' });
-
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ success: false, message: 'Token inválido' });
-
-    if (!rolesPermitidos.includes(decoded.role)) {
-      return res.status(403).json({ success: false, message: 'No tiene permisos para acceder a esta ruta' });
-    }
-
-    req.user = decoded; // Guarda la información del usuario decodificada en la solicitud
-    next();
-  });
-};
-
 app.get('/api/escultores/:nombre', async (req, res) => {
   const nombre = req.params.nombre; // Obtiene el nombre del parámetro de la URL
   const cards = await obtenerArtistas(nombre, 'nombre', 'DESC');; // Función para obtener un escultor específico
@@ -466,11 +399,6 @@ app.get('/api/eventos', async (req, res) => {
   res.json(cards);
 });
 
-app.get('/api/eventoProximo', async (req, res) => {
-  const cards = await obtenerEventoProximo();
-  res.json(cards);
-});
-
 app.get('/api/eventos/:nombre', async (req, res) => {
   const nombre = req.params.nombre;
   const cards = await obtenerEventos(nombre, 'nombre', 'DESC');
@@ -481,6 +409,7 @@ app.get('/api/eventos/:nombre', async (req, res) => {
   };
   res.json(respuesta);
 });
+
 
 app.post('/api/login', (req, res) => {
   const { correo, contraseña } = req.body;
@@ -528,10 +457,33 @@ app.post('/api/login', (req, res) => {
   }
 });
 
+// Middleware para verificar token y rol
+const verificarTokenYRol = (rolesPermitidos) => (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) return res.status(403).json({ success: false, message: 'Token no proporcionado' });
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ success: false, message: 'Token inválido' });
+
+    if (!rolesPermitidos.includes(decoded.role)) {
+      return res.status(403).json({ success: false, message: 'No tiene permisos para acceder a esta ruta' });
+    }
+
+    req.user = decoded; // Guarda la información del usuario decodificada en la solicitud
+    next();
+  });
+};
+
 // Endpoint para verificar el token y obtener el correo
 app.get('/api/verificar', verificarTokenYRol, (req, res) => {
     const correo = req.user.correo; // Suponiendo que el correo está en el payload del token
     res.json({ success: true, correo });
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
 
 // Ruta solo para administradores
@@ -579,6 +531,7 @@ app.get('/api/artista/:email', async (req, res) => {
     res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 });
+
 
 app.post('/api/registro', (req, res) => {
   const { nombreapellido, correo, contraseña } = req.body;
@@ -670,8 +623,4 @@ app.post('/api/artistaNuevo', upload.single('imagenPerfil'), async (req, res) =>
     console.error('Error al registrar artista:', error);
     res.status(500).json({ error: 'Hubo un error al registrar el artista' });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
 });

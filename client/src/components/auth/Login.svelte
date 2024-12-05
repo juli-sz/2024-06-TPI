@@ -94,16 +94,22 @@
                 bind:value={contraseña}
                 class="input"
               />
+              <div class="logo text-center">
+                <p>
+                  ¿Ha olvidado su contraseña?
+                  <a href="/cambiarContraseña">Cámbiela Aquí</a>. <br />
+                </p>
+              </div>
             </div>
             <button type="submit" class="button">Iniciar sesión</button>
           </form>
         </div>
         <!-- Columna derecha -->
         <div class="info-panel">
-          <h4>¡Bienvenido a la Bienal!</h4>
+          <h4>Bienvenido a la bienal</h4>
           <p>
             Si quiere votar a las esculturas y no tiene cuenta, 
-            <a href="/registro">regístrese aquí</a>. <br />
+            <a href="/registro">Regístrese Aquí</a>. <br />
             Si es un escultor y no tiene perfil, comuníquese con administración.
           </p>
         </div>

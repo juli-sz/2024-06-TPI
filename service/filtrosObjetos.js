@@ -205,37 +205,3 @@ export function buscarArtistas(listaArtistas, busqueda) {
     return resultados;
 }
 
-export function eventoProximo(listaEventos) {
-    const ahora = new Date();
-    return listaEventos
-        .filter(evento => {
-            // Crear el objeto Date desde fecha_inicio
-            const fechaHoraEvento = new Date(evento.fecha_inicio);
-            // Extraer hora, minutos y segundos de hora_inicio
-            const [hora, minutos, segundos] = evento.hora_inicio.split(":").map(Number);
-            // Ajustar la hora, minutos y segundos en el objeto Date
-            fechaHoraEvento.setUTCHours(hora, minutos, segundos || 0);
-            // Devolver solo los eventos futuros
-            return fechaHoraEvento > ahora;
-        })
-        .sort((a, b) => {
-            // Crear el objeto Date desde fecha_inicio
-            const fechaHoraEventoA = new Date(a.fecha_inicio);
-            // Extraer hora, minutos y segundos de hora_inicio
-            const [horaA, minutosA, segundosA] = a.hora_inicio.split(":").map(Number);
-            // Ajustar la hora, minutos y segundos en el objeto Date
-            fechaHoraEventoA.setUTCHours(horaA, minutosA, segundosA || 0);
-
-            // Crear el objeto Date desde fecha_inicio
-            const fechaHoraEventoB = new Date(a.fecha_inicio);
-            // Extraer hora, minutos y segundos de hora_inicio
-            const [horaB, minutosB, segundosB] = a.hora_inicio.split(":").map(Number);
-            // Ajustar la hora, minutos y segundos en el objeto Date
-            fechaHoraEventoA.setUTCHours(horaB, minutosB, segundosB || 0);
-
-            // Ordenar los eventos futuros por fecha y hora
-            const fechaHoraA = new Date(fechaHoraEventoA);
-            const fechaHoraB = new Date(fechaHoraEventoB);
-            return fechaHoraA - fechaHoraB;
-        })[0]; // Devolver el primer evento (el más cercano)
-}

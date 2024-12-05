@@ -2,16 +2,10 @@
   let nombreapellido = '';
   let correo = '';
   let contraseña = '';
-  let confirmcontraseña = '';
+
   const registrarUsuario = async () => {
-  if (!nombreapellido || !correo || !contraseña|| !confirmcontraseña) {
+  if (!nombreapellido || !correo || !contraseña) {
     alert('Por favor, completa todos los campos.');
-    return;
-  }
-  if (confirmcontraseña!==contraseña) {
-    alert('La contraseña y su confirmación no coinciden. Inténtelo de nuevo.');
-    confirmcontraseña='';
-    contraseña='';
     return;
   }
 
@@ -60,10 +54,9 @@ const cancelar = () => {
     <div class="logo text-center">
       <h2>Registro</h2>
     </div>  
-    <input type="text" placeholder="Nombre y Apellido" bind:value={nombreapellido} class="input" />
-    <input type="email" placeholder="Correo electrónico" bind:value={correo} class="input" />
-    <input type="password" placeholder="Contraseña" bind:value={contraseña} class="input" />
-    <input type="password" placeholder="Confirmar contraseña" bind:value={confirmcontraseña} class="input" />
+    <input type="text" placeholder="Nombre y Apellido" class="input" />
+    <input type="email" placeholder="Correo electrónico" class="input" />
+    <input type="password" placeholder="Contraseña" class="input" />
     <div class="button-group">
       <button type="submit" class="button">Registrarse</button>
       <button type="button" class="cancel-button" on:click={cancelar}>

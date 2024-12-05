@@ -81,15 +81,13 @@ export class Artistas {
     contacto;
     URL_foto;
     promedio;
-    nacionalidad;
-    constructor(DNI, NyA, res_biografia, contacto, URL_foto, promedio,nacionalidad) {
+    constructor(DNI, NyA, res_biografia, contacto, URL_foto, promedio) {
         this.DNI = DNI;
         this.NyA = NyA;
         this.res_biografia = res_biografia;
         this.contacto = contacto;
         this.URL_foto = URL_foto;
         this.promedio = promedio;
-        this.nacionalidad=nacionalidad;
     }
     getDNI() { return this.DNI; }
     getNyA() { return this.NyA; }
@@ -97,7 +95,6 @@ export class Artistas {
     getContacto() { return this.contacto; }
     getURL_foto() { return this.URL_foto; }
     getPromedio() { return this.promedio; }
-    getNacionalidad() { return this.nacionalidad; }
 
 
 }
