@@ -20,7 +20,7 @@
     async function fetchObras(query = "", criterio = 'promedio', orden = 'DESC') {
         mostrandoCarga = true;
         try {
-            const res = await axios.get(`http://localhost:3001/api/esculturas`, {
+            const res = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/esculturas`, {
                 params: {
                     search: query,     // Parámetro de búsqueda
                     sortBy: criterio,  // Criterio de ordenación (nombre, f_creacion, promedio)

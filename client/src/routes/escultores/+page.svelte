@@ -18,7 +18,7 @@
   async function fetchEscultores(query = "", criterio = "promedio", orden = "DESC") {
     mostrandoCarga = true;
     try {
-      const res = await axios.get(`http://localhost:3001/api/escultores`, {
+      const res = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/escultores`, {
         params: {
           search: query,
           sortBy: criterio,

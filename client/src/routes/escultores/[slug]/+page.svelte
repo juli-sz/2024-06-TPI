@@ -16,7 +16,7 @@
     async function fetchEscultor(slug) {
         mostrandoCarga = true;
         try {
-            const response = await axios.get(`http://localhost:3001/api/escultores/${slug}`, {
+            const response = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/escultores/${slug}`, {
                 params: { nombre: slug }
             });
             data = response.data;

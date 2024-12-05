@@ -26,7 +26,7 @@
     async function fetchEventos(query = "", criterio = 'promedio', orden = 'DESC') {
         mostrandoCarga = true;
         try {
-            const res = await axios.get(`http://localhost:3001/api/eventos`, {
+            const res = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/eventos`, {
                 params: {
                     search: query,     // Parámetro de búsqueda
                     sortBy: criterio,  // Criterio de ordenación (nombre, f_creacion, promedio)
@@ -35,7 +35,7 @@
             });
             cards = res.data;
 
-            const resObraReciente = await axios.get(`http://localhost:3001/api/eventoProximo`);
+            const resObraReciente = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/eventoProximo`);
             obraReciente = resObraReciente.data[0];
 
             currentPage = 1;

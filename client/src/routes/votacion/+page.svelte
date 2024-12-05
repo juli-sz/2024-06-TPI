@@ -52,7 +52,7 @@
     async function fetchVotacion(query = name, criterio = 'promedio', orden = 'DESC') {
         mostrandoCarga = true;
         try {
-            const res = await axios.get(`http://localhost:3001/api/esculturas`, {
+            const res = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/esculturas`, {
                 params: {
                     search: query,     // Parámetro de búsqueda
                     sortBy: criterio,  // Criterio de ordenación (nombre, f_creacion, promedio)
@@ -83,7 +83,7 @@
       console.log('Mandado:', { rating, nombre , email}); // Para depuración
 
       try {
-        const response = await fetch('http://localhost:3001/api/votacion', {
+        const response = await fetch('http://2024-06-tpi-production.up.railway.app/api/votacion', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -16,7 +16,7 @@
     async function fetchEvento(slug) {
         mostrandoCarga = true;
         try {
-            const res = await axios.get(`http://localhost:3001/api/eventos/${slug}`, {
+            const res = await axios.get(`http://2024-06-tpi-production.up.railway.app/api/eventos/${slug}`, {
                 params: { nombre: slug }
             });
             data = res.data;

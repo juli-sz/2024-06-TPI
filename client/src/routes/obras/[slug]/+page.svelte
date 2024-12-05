@@ -41,7 +41,7 @@
     nombreObra=slug
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/obras/${slug}`,
+        `http://2024-06-tpi-production.up.railway.app/api/obras/${slug}`,
         {
           // Cambia la ruta a '/api/obras'
           params: { nombre: slug },

@@ -18,7 +18,7 @@
   console.log('Datos enviados:', { nombreapellido, correo, contraseña }); // Para depuración
 
   try {
-    const response = await fetch('http://localhost:3001/api/registro', {
+    const response = await fetch('http://2024-06-tpi-production.up.railway.app/api/registro', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
